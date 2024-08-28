@@ -1,16 +1,18 @@
-• insmod and rmmod should be called using sudo or as root. Note that the printk() output of _init and _exit function could only be seen from text console, in a terminal emulator running under the window system maybe you cannot see the output. But it should be in /var/log/messages or /var/log/syslog, or through dmesg.
-• Linux kernel code, including driver code, must be reentrant - it must be capable of running in more than one context at the same time.
-• Functions with a double underscore (__) in kernel API should be used with caution.
-• Kernel code cannot do floating point arithmetic.
+- insmod and rmmod should be called using sudo or as root. Note that the printk() output of _init and _exit function could only be seen from text console, in a terminal emulator running under the window system maybe you cannot see the output. But it should be in /var/log/messages or /var/log/syslog, or through dmesg.
+- Linux kernel code, including driver code, must be reentrant - it must be capable of running in more than one context at the same time.
+- Functions with a double underscore (__) in kernel API should be used with caution.
+- Kernel code cannot do floating point arithmetic.
 
 1. Compiling and Loading modules:
 This could also refer to the notes of LKD chapter_17. For here, we just focus on compiling modules outside the kernel source tree.
-obj-m := hello.o (= 最基本的赋值；:= 覆盖之前的赋值；?= 如果之前没有被赋值过就赋值; += 添加等号后面的值)
+obj-m := hello.o
 If your kernel source tree is located in, say, ~/kernel-2.6/ directory, and assuming you're currently in the module's directory which contains its own makefile and outside kernel source tree, do:
-	$ make -C ~/kernel-2.6 M=`pwd` modules; ($ make modules; is to build the modules.)
+	```$ make -C ~/kernel-2.6 M=`pwd` modules; ($ make modules; is to build the modules.)```
 This commands starts by changing its directory to the one proviced with the -C option, it then finds the kernel's top-level Makefile. The 'M=' option causes that Makefile to move back to the module source directory before trying to build the modules target. This target, in turn, refers to the list of modules found in obj-m variable.
 * Another Makefile that does the same but just need to do $ make:
-==========================================================
+
+```Makefile
+#==========================================================
 ifneq ($(KERNELRELEASE),)
 	obj-m := hello.o
 else
@@ -21,14 +23,15 @@ else
 		$(MAKE) -C $(KERNEL_DIR) M=$(PWD) modules
 
 endif
-==========================================================
+#==========================================================
+```
 Call chain: make -> else -> default -> Makefile in kernel source tree, where defines KERNELRELEASE -> back to module dir -> Makefile in module dir -> obj-m := hello.o.
 
-• Loading and unloading modules:
+- Loading and unloading modules:
 insmod could also assign values to parameters in the module before linking it to the current kernel. Thus a module can be configured at load time. (It relies on a syscall defined in kernel/module.c; the function sys_init_module allocates kernel memory to hold a module (this memory is allocated with vmalloc), it then copies the module text into that memory region, resolves kernel references in the module via the kernel symbol table, and calls the module's initialization function to get everything going.)
 * lsmod gives a list of modules currently loaded in the kernel. It reads the /proc/modules virtual file. Information of currently loaded modules can also be found in the /sys/module/* directories.
 
-• Version dependency:
+- Version dependency:
 Note that your module's code has to be recompiled for each version of the kernel that it is linked to. Modules are strongly tied to the data structures and function prototypes defined in a particular kernel version. <linux/version.h>, which is included by <linux/module.h>, defines the following macros:
 UTS_RELEASE: defined in <linux/vermagic.h>, contains the string describing the version of this kernel tree, for example: "2.6.10".
 LINUX_VERSION_CODE: This macro is a binary (integer) representation of the kernel version. For example: for 2.6.10 -> 0x02060a -> 132618 (LINUX_VERSION_CODE).
@@ -40,15 +43,15 @@ EXPORT_SYMBOL(name);
 EXPORT_SYMBOL_GPL(name);
 Symbols must be exported in the global part of the module's file, outside of any function. Because the above macros expand to the declaration of a special-purpose variable that is expected to be accessible globally. This variable is stored in a special part of the module executible (an ELF section) that is used by the kernel at load time to find the variables exported by the module.
 
-• MODULE_LICENSE("GPL"): "GPL" could also be "GPL v2", "GPL and additional rights", "Dual BSD/GPL", "Dual MPL/GPL", and "Proprietary".
+- MODULE_LICENSE("GPL"): "GPL" could also be "GPL v2", "GPL and additional rights", "Dual BSD/GPL", "Dual MPL/GPL", and "Proprietary".
 
-• Initialization and shutdown:
+- Initialization and shutdown:
 __init, __initdata, __exit, __exitdata:
 For example: static int __init initialization_func(void); static void __exit cleanup_func(void);
 Markers for functions (__init and __exit) and data(__initdata and __exitdata) that are only used at module initialization or cleanup time. Items marked for initialization may be discarded once initialization completes; the exit items may be discarded if module unloading has not been configured into the kernel.
 Note that if your module doesn't define a cleanup function, the kernel doesn't allow it to be unloaded.
 
-• Error handling during initialization:
+- Error handling during initialization:
 One thing should always bear in mind when registering facilities with the kernel is that the registration could fail. So you may need to check each allocation/registration's return value before going on. 
 Error recovery is sometimes best handled with the goto statement.
 

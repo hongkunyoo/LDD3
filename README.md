@@ -1,16 +1,16 @@
-* Chapter 01: An introduction to device drivers
-* Chapter 02: Building and Running Modules
-* Chapter 03: Char Drivers
-* Chapter 04: Debugging Techniques
-* Chapter 05: Concurrency and Race Conditions
-* Chapter 06: Advanced Char Driver Operations
-* Chapter 07: Time, Delays, and Deferred Work
-* Chapter 08: Allocating Memory
-* Chapter 09: Communicating with Hardware
-* Chapter 10: Interrupt Handling
-* Chapter 11: Data Types in the Kernel
-* Chapter 12: PCI Drivers
-* Chapter 13: USB Drivers
-* Chapter 14: The Linux Device Module
-* Chapter 15: Memory Mapping and DMA
-* Chapter 16: Block Drivers
+* Chapter 01: [An introduction to device drivers](chapter_01/README.md)
+* Chapter 02: [Building and Running Modules](chapter_02/README.md)
+* Chapter 03: [Char Drivers](chapter_03/README.md)
+* Chapter 04: [Debugging Techniques](chapter_04/README.md)
+* Chapter 05: [Concurrency and Race Conditions](chapter_05/README.md)
+* Chapter 06: [Advanced Char Driver Operations](chapter_06/README.md)
+* Chapter 07: [Time, Delays, and Deferred Work](chapter_07/README.md)
+* Chapter 08: [Allocating Memory](chapter_08/README.md)
+* Chapter 09: [Communicating with Hardware](chapter_09/README.md)
+* Chapter 10: [Interrupt Handling](chapter_10/README.md)
+* Chapter 11: [Data Types in the Kernel](chapter_11/README.md)
+* Chapter 12: [PCI Drivers](chapter_12/README.md)
+* Chapter 13: [USB Drivers](chapter_13/README.md)
+* Chapter 14: [The Linux Device Module](chapter_14/README.md)
+* Chapter 15: [Memory Mapping and DMA](chapter_15/README.md)
+* Chapter 16: [Block Drivers](chapter_16/README.md)
